@@ -2,7 +2,7 @@
 
 ### Kuvaus
 
-Tuntikirjaustyökalu 
+Tuntikirjaustyökalu. 'Vanhempi ATK-ohjelmoitsija kirjaa tuntinsa Tuntikikkareella' 
 
 Dokumentaatiota löytyy kaikille yhteisistä dokumentaatiosta 'tuntikirjausjärjestelmä harkkatyö' -kansiosta. 
 
