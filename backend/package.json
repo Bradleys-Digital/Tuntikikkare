@@ -1,0 +1,39 @@
+{
+  "name": "tuntikikkare-backend",
+  "version": "0.0.1",
+  "description": "Vanhemmat ATK-ohjelmoitsijat merkkaavat tuntinsa tuntikikkareeseen",
+  "main": "index.ts",
+  "scripts": {
+    "postinstall": "npm run build",
+    "build": "tsc",
+    "watch-build": "tsc -w",
+    "start": "node dist/index.js",
+    "watch-start": "nodemon --delay 2 -w dist/ -x 'npm run start'",
+    "dev": "concurrently -k -p '[{name}]' -n 'typescript,api' -c 'yellow.bold,cyan.bold' npm:watch-build npm:watch-start",
+    "lint": "tslint --format prose --project .",
+    "test": "jest",
+    "generate-types": "openapi --input ../openapi-definition.yaml --output ./types --exportCore false --exportServices false"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "openapi-backend": "^4.0.0",
+    "source-map-support": "^0.5.10"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^10.12.26",
+    "axios": "^0.21.1",
+    "concurrently": "^6.2.0",
+    "jest": "^27.0.4",
+    "nodemon": "^2.0.12",
+    "ts-jest": "^27.0.2",
+    "tslint": "^5.12.1",
+    "typescript": "^4.3.2",
+    "wait-on": "^3.2.0",
+    "openapi-typescript-codegen": "^0.9.3"
+  },
+  "author": "Bradleys Digital Oy",
+  "license": "MIT"
+}

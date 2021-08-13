@@ -1,0 +1,410 @@
+---
+openapi: 3.0.3
+info:
+  version: 0.0.1
+  title: Tuntikikkare
+  license:
+    name: MIT
+paths:
+  /companies:
+    get:
+      summary: Get all companies
+      operationId: getCompanies
+      responses:
+        '200': 
+          description: List of companies added to the system
+          content:
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Companies"
+    post: 
+      summary: Create a company
+      operationId: addCompany
+      requestBody:
+        description: Company information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyAdd'
+      responses:
+        '201':
+          description: Company added
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /projects:
+    post: 
+      summary: Create a project
+      operationId: addProject
+      requestBody:
+        description: Project information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectAdd'
+      responses:
+        '201':
+          description: Project added
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /tasks:
+    post: 
+      summary: Create a task
+      operationId: addTask
+      requestBody:
+        description: Task information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskAdd'
+      responses:
+        '201':
+          description: Task added
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /employees:
+    get: 
+      summary: Get employees
+      operationId: getEmployees
+      responses:
+        '200':
+          description: employees
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create an employee
+      operationId: addEmployee
+      requestBody:
+        description: Employee information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeAdd'
+      responses:
+        '201':
+          description: Employee added
+          content: 
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Employee'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /entries:
+    get: 
+      summary: Get entries based on search criteria
+      operationId: getEntries
+      parameters:
+        - name: employee_id
+          in: query
+          description: filter entries based on employee
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: project_id
+          in: query
+          description: filter entries based on project
+          required: false
+          schema: 
+            type: integer
+            format: int32
+        - name: task_id
+          in: query
+          description: filter entries based on task
+          required: false
+          schema: 
+            type: integer
+            format: int32 
+        - name: startDate
+          in: query
+          description: filter entries starting from this date
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          description: filter entries ending to this date
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200': 
+          description: Entries based on search criteria
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Entries'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post: 
+      summary: Add new entry
+      operationId: addEntry
+      requestBody:
+        description: Entry information
+        content:
+          application/json: 
+            schema:
+              $ref: '#/components/schemas/EntryAdd'
+      responses:
+        '201': 
+          description: Entry created
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Entry'
+        default:  
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    BaseObject: 
+      type: object
+      description: Object representing information that is reused often. This is not meant to be used in api, just as an helper to avoid duplication.
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+    Companies:
+      type: array
+      items:
+        $ref: '#/components/schemas/Company'
+    Company:
+      allOf:
+        - $ref: '#/components/schemas/BaseObject'
+        - type: array
+          description: List of projects of this company
+          items: 
+            $ref: "#/components/schemas/Project"
+    CompanyAdd:
+      type: object
+      description: Object representing a new company
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+    Project:
+      allOf:
+        - $ref: '#/components/schemas/BaseObject'
+        - type: object
+          description: Object representing a project
+          required:
+            - company_id
+            - tasks
+          properties:
+            company_id:
+              type: integer
+              format: int32
+            tasks:
+              type: array
+              items: 
+                $ref: "#/components/schemas/Task"
+    ProjectAdd: 
+      type: object
+      description: Object representing a new project
+      required:
+        - company_id
+        - name
+      properties:
+        company_id:
+          type: integer
+          format: int32
+        name: 
+          type: string
+          minLength: 1
+          maxLength: 255
+    Task:
+      allOf:
+        - $ref: '#/components/schemas/BaseObject'
+        - type: object
+          description: Object representing a task. 
+          required:
+            - project_id
+            - entries
+          properties:
+            project_id:
+              type: integer
+              format: int32
+            entries:
+              type: array
+              items:  
+                $ref: "#/components/schemas/Entry"
+    TaskAdd:
+      type: object
+      description: Object representing a new task.
+      required:
+        - project_id
+        - name
+      properties:
+        project_id:
+          type: integer
+          format: int32
+        name: 
+          type: string
+          minLength: 1
+          maxLength: 255
+    Person:
+      type: object
+      description: Object representing information about a person
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 255
+        lastName: 
+          type: string
+          minLength: 1
+          maxLength: 255
+        email:
+          type: string
+          format: text
+          minLength: 1
+          maxLength: 255
+    Employee:
+      allOf: 
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          description: Object representing an employee
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int32
+    EmployeeAdd:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+    Entries:
+      type: array
+      items:
+        $ref: "#/components/schemas/Entry"
+    Entry:
+      type: object
+      description: Object that represents an entry that an employee works on in a project
+      required:
+        - id
+        - employee_id
+        - task_id
+        - date
+        - hours
+      properties:
+        id:
+          type: integer
+          format: int32
+        employee_id:
+          type: integer
+          format: int32
+        task_id:
+          type: integer
+          format: int32
+        date: 
+          type: string
+          format: date
+          description: Date when the work has been done
+        hours: 
+          type: number
+          format: double
+          description: How many hours of work has been done
+        comment:
+          type: string
+          description: Optional comment about the entry
+          minLength: 1
+          maxLength: 255
+    EntryAdd:
+      type: object
+      description: Object that represents a new record
+      required:
+        - employee_id
+        - task_id
+        - date
+        - hours
+      properties:
+        employee_id:
+          type: integer
+          format: int32
+        task_id:
+          type: integer
+          format: int32
+        date: 
+          type: string
+          format: date
+          description: Date when the work has been done
+        hours: 
+          type: number
+          format: double
+          description: How many hours of work has been done
+        comment:
+          type: string
+          description: Optional comment about the record
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          description: Error message
+          minLength: 1
+          maxLength: 255
+        
