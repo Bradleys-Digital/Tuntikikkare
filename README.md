@@ -9,8 +9,7 @@ Dokumentaatiota löytyy kaikille yhteisistä dokumentaatiosta 'tuntikirjausjärj
 ### Teknologiat
 
 - Node 16
-- Docker
-
+- 
 #### Kirjastot
 - [openapi-backend](https://github.com/anttiviljami/openapi-backend/blob/master/DOCS.mdexpress)
   - 
@@ -18,15 +17,9 @@ Dokumentaatiota löytyy kaikille yhteisistä dokumentaatiosta 'tuntikirjausjärj
 ### Kehitys
 
 Vaatimukset: 
- - Docker TAI
  - Node 16 (npm install ei toimi LTS-versiolla)
 
 Palvelimen käynnistys:
-
-```
-# Dockerin avulla
-docker compose up
-```
 
 ```
 # lokaalia nodea hyödyntäen backend -kansiossa
@@ -41,7 +34,6 @@ Eli esimerkiksi: http://localhost:9000/companies
 Typescript tyyppien generointi openapi-spesifikaatiosta:
 
 ```
-# tämän voi ajaa docker kontissa tai host-koneella
 npm run generate-types
 ```
 
@@ -49,3 +41,4 @@ npm run generate-types
 ### Todo
 - AWS-tili: käyttäjänhallinta esim. cognito, serverille kone ja tietokanta 
 - Frontendin pystyttäminen
+- dockeroidun ajoympäristön viimeistely
