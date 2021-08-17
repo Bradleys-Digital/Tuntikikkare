@@ -1,8 +1,10 @@
 version: "3.9"
 services: 
-  server:
+  backend:
     build: .
+    container_name: tuntikikkare
     ports: 
       - "9000:9000"
     volumes:
-      - .:/code 
+      - ./:/tuntikikkare
+    entrypoint: /tuntikikkare/entrypoint.sh
